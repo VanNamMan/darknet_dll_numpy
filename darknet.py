@@ -288,26 +288,27 @@ rgbgr_image = lib.rgbgr_image
 rgbgr_image.argtypes = [IMAGE]
 
 
-def nparray_to_image(arr):
-    """Convert nparray to Darknet image struct.
-    Args:
-        arr: nparray containing source image in BGR color model.
-    Returns:
-        Darknet image struct, whose data is a C array
-        containing flatten image in BGR color model.
-    """
-    arr = arr.transpose(2,0,1)
-    c = arr.shape[0]
-    h = arr.shape[1]
-    w = arr.shape[2]
-    arr = (arr/255.0).flatten()
-    data = c_array(c_float, arr)
-    im = IMAGE(w, h, c, data)
-    rgbgr_image(im)
-    return im
+# def nparray_to_image(arr):
+#     """Convert nparray to Darknet image struct.
+#     Args:
+#         arr: nparray containing source image in BGR color model.
+#     Returns:
+#         Darknet image struct, whose data is a C array
+#         containing flatten image in BGR color model.
+#     """
+#     arr = arr.transpose(2,0,1)
+#     c = arr.shape[0]
+#     h = arr.shape[1]
+#     w = arr.shape[2]
+#     arr = (arr/255.0).flatten()
+#     data = c_array(c_float, arr)
+#     im = IMAGE(w, h, c, data)
+#     rgbgr_image(im)
+#     return im
 
 def detect_np(net, meta, np_img, thresh=.5, hier_thresh=.5, nms=.45):
-    im = nparray_to_image(np_img)
+    # im = nparray_to_image(np_img)
+    im,_ = array_to_image(np_img)
     res = detect_image(net, meta, im, thresh, hier_thresh, nms, debug=False)
     return res
 
